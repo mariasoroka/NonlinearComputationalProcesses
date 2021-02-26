@@ -1,0 +1,1 @@
+My solutions for Nonlinear Computational Processes course at MIPT
