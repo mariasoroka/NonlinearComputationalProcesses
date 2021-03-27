@@ -14,14 +14,14 @@ def get_alphas(CFL, alpha00, alpha0_1):
     alpha_10 = (2 - CFL - 2 * alpha00 - alpha0_1) / (2 + CFL)
     alpha0_2 = (2 * CFL - CFL * alpha00 - (CFL + 1) * alpha0_1) / (2 + CFL)
     return np.array([alpha00, alpha0_1, alpha0_2, alpha_10])
-def solve(grid, h, tau, order, CFL, alpha00, alpha0_1, number_of_time_steps, number_of_x_steps, border_value, in_func):
+def solve(grid, h, tau, order, CFL, alpha00, alpha0_1, number_of_time_steps, number_of_x_steps, boundary_value, in_func):
     a = get_alphas(CFL, alpha00, alpha0_1)
     next_ = np.zeros(number_of_x_steps)
     current_ = np.zeros(number_of_x_steps)
     prev_ = np.zeros(number_of_x_steps)
     init_(prev_, current_, grid, h, tau, CFL, 1, number_of_x_steps, in_func)
     for i in range(0, number_of_time_steps):
-        next_[0] = border_value
+        next_[0] = boundary_value
         if (order == 1):
             next_[1] = next_[0]
         elif (order == 2):
@@ -41,7 +41,7 @@ def check_condition(tmp, a, b):
         if(b <= tmp and tmp <= a):
             return 1   
     return 0
-def solve_hybrid(grid, h, tau, order, CFL, number_of_time_steps, number_of_x_steps, def_alpha00, def_alpha0_1, f_alpha00, f_alpha0_1, s_alpha00, s_alpha0_1, border_value, in_func):
+def solve_hybrid(grid, h, tau, order, CFL, number_of_time_steps, number_of_x_steps, def_alpha00, def_alpha0_1, f_alpha00, f_alpha0_1, s_alpha00, s_alpha0_1, boundary_value, in_func):
     a = get_alphas(CFL, def_alpha00, def_alpha0_1)
     b = get_alphas(CFL, f_alpha00, f_alpha0_1)
     c = get_alphas(CFL, s_alpha00, s_alpha0_1)
@@ -50,7 +50,7 @@ def solve_hybrid(grid, h, tau, order, CFL, number_of_time_steps, number_of_x_ste
     prev_ = np.zeros(number_of_x_steps)
     init_(prev_, current_, grid, h, tau, CFL, 1, number_of_x_steps, in_func)
     for i in range(0, number_of_time_steps):
-        next_[0] = border_value
+        next_[0] = boundary_value
         if (order == 1):
             next_[1] = next_[0]
         elif (order == 2):
@@ -70,14 +70,14 @@ def solve_hybrid(grid, h, tau, order, CFL, number_of_time_steps, number_of_x_ste
         prev_ = current_.copy()
         current_ = next_.copy()
     return next_
-def solve_symmetric(grid, h, tau, order, CFL, alpha00, alpha0_1, number_of_time_steps, number_of_x_steps, border_value, in_func):
+def solve_symmetric(grid, h, tau, order, CFL, alpha00, alpha0_1, number_of_time_steps, number_of_x_steps, boundary_value, in_func):
     a = get_alphas(CFL, alpha00, alpha0_1)
     next_ = np.zeros(number_of_x_steps)
     current_ = np.zeros(number_of_x_steps)
     prev_ = np.zeros(number_of_x_steps)
     init_(prev_, current_, grid, h, tau, CFL, -1, number_of_x_steps, in_func)
     for i in range(0, number_of_time_steps):
-        next_[number_of_x_steps - 1] = border_value
+        next_[number_of_x_steps - 1] = boundary_value
         if (order == 1):
             next_[number_of_x_steps - 2] = next_[number_of_x_steps - 1]
         elif (order == 2):
@@ -89,7 +89,7 @@ def solve_symmetric(grid, h, tau, order, CFL, alpha00, alpha0_1, number_of_time_
         prev_ = current_.copy()
         current_ = next_.copy()
     return next_
-def solve_hybrid_symmetric(grid, h, tau, order, CFL, number_of_time_steps, number_of_x_steps, def_alpha00, def_alpha0_1, f_alpha00, f_alpha0_1, s_alpha00, s_alpha0_1, border_value, in_func):
+def solve_hybrid_symmetric(grid, h, tau, order, CFL, number_of_time_steps, number_of_x_steps, def_alpha00, def_alpha0_1, f_alpha00, f_alpha0_1, s_alpha00, s_alpha0_1, boundary_value, in_func):
     a = get_alphas(CFL, def_alpha00, def_alpha0_1)
     b = get_alphas(CFL, f_alpha00, f_alpha0_1)
     c = get_alphas(CFL, s_alpha00, s_alpha0_1)
@@ -98,7 +98,7 @@ def solve_hybrid_symmetric(grid, h, tau, order, CFL, number_of_time_steps, numbe
     prev_ = np.zeros(number_of_x_steps)
     init_(prev_, current_, grid, h, tau, CFL, 1, number_of_x_steps, in_func)
     for i in range(0, number_of_time_steps):
-        next_[number_of_x_steps - 1] = border_value
+        next_[number_of_x_steps - 1] = boundary_value
         if (order == 1):
             next_[number_of_x_steps - 2] = next_[number_of_x_steps - 1]
         elif (order == 2):
